@@ -10,41 +10,36 @@ switch ($op) {
     case 'login':
         $username = $_POST['user'];
         $password = $_POST['pass'];
-        if ($user_controller->login($username, $password) == 'admin') {
-            header("Location:dashboard.php");
+        if ($user_controller->login($username, $password) == 'true') {
+            header("Location:main.php");
         } 
-//        elseif ($user_controller->login($username, $password) == 'faculty'){
-//            header("Locatiosn:faculty.php");
-//        } elseif ($user_controller->login($username, $password) == 'admin'){
-//            header("Location:admin.php");
-//        }
-        else header("Location:index.php?err=1");
+        else header("Location:login.php?err=1");
         break;
     
     case 'register':
         $usertype = $_POST['inputUsertype'];
         $name = $_POST['inputText'];
         $password = $_POST['inputPassword'];
-        $email = $_POST['inputEmail'];
-//        if ($user_controller->validate_empty($usertype, $id, $firstname, $lastname, $username, $password, $cpassword, $email) == false){
-//            header("Location:registration.php?err=1");
-//        } elseif ($user_controller->validate_password($password)== false) {
-//            header("Location:registration.php?err=2");
-//        } elseif ($user_controller->compare_password($password, $cpassword)== false) {
-//            header("Location:registration.php?err=3");
-//        } elseif ($user_controller->validate_valid($id)== false) {
-//            header("Location:registration.php?err=4");
-//        } elseif ($user_controller->Validate_email($email)== false) {
-//            header("Location:registration.php?err=5");    
+        $email = $_POST['inputEmail'];    
         if ($user_controller->create($usertype, $name, $password, $email)== false) {
-            header("Location:registration.php?err=6");
+            header("Location:register.php?err=1");
         } 
             
         else header("Location:dashboard.php");
         
         break;
     
-    case 'create group':
+    case 'creategroup':
+        $name=$_POST['inputgroup'];
+//        $group_member=$_POST['member1'];
+//        $email=$_POST['email1'];
+        $createdby=$_POST['createdby'];
+        if ($user_controller->create_group($name, $createdby)== false){
+            header("Location:create_events.php?err=2");
+        } else header("Location:main.php");
+        break;
+    
+    case 'Save':
         $name=$_POST['inputgroup'];
         $group_member=$_POST['member1'];
         $email=$_POST['email1'];
@@ -52,7 +47,7 @@ switch ($op) {
             header("Location:create_events.php?err=2");
         } else header("Location:main.php");
         break;
-    
+        
     case 'REGISTER':
         $studentid=$_POST['studentid'];
         $hearabout=$_POST['hearselect'];

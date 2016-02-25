@@ -79,7 +79,9 @@
     <div class="container"> 
         <form class="form-signin" method="post" action="navigate.php">
             <h1 class="form-signin-heading">Register Yourself</h1>
-            <hr></hr>
+            <?php if(@$_GET['err'] == 1)  {  ?>
+            <div class="text-danger">Username or Email Address already taken. Please try again.</div>
+            <?php  }  ?>
             <div class="form-group">
                 <label for="inputText">My Name</label>
                 <input type="text" id="inputText" name="inputText" class="form-control" placeholder="Username" required autofocus>

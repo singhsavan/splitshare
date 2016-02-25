@@ -74,12 +74,19 @@
     <!-- Main jumbotron for a primary marketing message or call to action -->
     
     <div class="container">
-        <form class="form-signin" method="post" action="navigate.php">
+        <form role="form" data-toggle="validator" class="form-signin" method="post" action="navigate.php">
             <h2 class="form-signin-heading">Please sign in</h2>
+            <?php if(@$_GET['err'] == 1)  {  ?>
+            <div class="text-danger">Login incorrect. Please try again</div>
+            <?php  }  ?>
+            <div class="form-group">
             <label for="inputText" class="sr-only">Username</label>
             <input type="text" id="inputText" name="user" class="form-control" placeholder="Username" required autofocus></input>
+            </div>
+            <div class="form-group">
             <label for="inputPassword" class="sr-only">Password</label>
             <input type="password" id="inputPassword" name="pass" class="form-control" placeholder="Password" required />
+            </div>
             <div class="checkbox">
                 <label>
                     <input type="checkbox" value="remember-me"> Remember me</input>

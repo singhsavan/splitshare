@@ -67,7 +67,7 @@ class UserController {
     
     function create($usertype, $name, $passwrd, $email) {
         $password = md5($passwrd);
-	$sql="SELECT * FROM users WHERE username='$name';";
+	$sql="SELECT * FROM users WHERE username='$name' or email_address='$email';";
 
 	//checking if the username or email is available in db
 	$check =  $this->db->query($sql);
@@ -75,7 +75,7 @@ class UserController {
         
 	//if the username is not in db then insert to the table
 	if ($count_row == 0){
-	$sql1="INSERT INTO `users` (`user_id`, `username`, `email_address`, `password`, `usertype`) VALUES (NULL, '$name', '$email', '$password', '$usertype')";
+	$sql1="INSERT INTO `users` (`user_id`, `username`, `email_address`, `password`) VALUES (NULL, '$name', '$email', '$password')";
         $result = mysqli_query($this->db,$sql1) or die(mysqli_connect_errno()."Data cannot inserted");
         session_start();
             $user = new UserModel($name);
@@ -88,21 +88,23 @@ class UserController {
 	else { return false;}
 }
     
-    function create_group($name, $group_member, $email) {
-	$sql="SELECT * FROM groups WHERE group_name='$name';";
+    function create_group($name, $createdby) {
+	$sql="SELECT * FROM groups WHERE group_name='$name'";
 	//checking if the username or email is available in db
 	$check =  $this->db->query($sql);
 	$count_row = $check->num_rows;
         
 	//if the username is not in db then insert to the table
 	if ($count_row == 0){
-	$sql1="INSERT INTO `groups` (`group_id`, `group_name`) VALUES (NULL, '$name')";
+	$sql1="INSERT INTO `groups` (`group_id`, `group_name`, `created_by`) VALUES (NULL, '$name', '$createdby')";
         $result = mysqli_query($this->db,$sql1) or die(mysqli_connect_errno()."Data cannot inserted");
+        $sql2="UPDATE users SET usertype = 'admin', group_created = '1' WHERE username = '$createdby'";
+        $result1 = mysqli_query($this->db,$sql2) or die(mysqli_connect_errno()."Data cannot inserted");
         return $result;
 	}
 	else { return false;}
 }
-
+   
     function register_events($studentid, $hearabout, $eventid) {
 	$sql="SELECT * FROM eventregister WHERE event_id='$eventid' and student_id='$studentid'";
 
@@ -131,7 +133,7 @@ class UserController {
             $_SESSION['usertype'] = $user->get_usertype();
             $sql = "INSERT INTO `login` (`id`, `username`, `password`, `usertype`) VALUES ('$this->id', '$username', MD5('$password'), '$this->usertype');";
             $result = mysqli_query($this->db, $sql);
-            return $this->usertype;
+            return true;
         } 
     }
     

@@ -92,32 +92,63 @@ if(!isset($_SESSION['user'])) {
     
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
-        <div class="container">
-                    
-                    <form class="form-signin" method="post" action="navigate.php">
-                        <h3 class="form-signin-heading">START A NEW GROUP</h3>
-                        <div class="form-group">
-                            <label for="inputText">My group is</label>
-                            <input type="text" id="inputgroup" name="inputgroup" class="form-control" required autofocus>
-                        </div>    
-                        <hr></hr>
-                        <h3>GROUP MEMBERS</h3>
-                        <div class="form-group">
-                            <input type="text" id="member1" name="member1" placeholder="Name" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" id="email1" name="email1" class="form-control" placeholder="Email Address" required>
-                        </div>
-                        
-                        <hr></hr>
-                        <div class="form-group">
-                            <button class="btn btn-lg btn-primary btn-block" type="submit" name="op" value="create group">Create</button>
-                        </div>
-                    </form>
+        <div class="container-fluid">
+	<div class="row">
+		<div class="col-md-3">
+                    <hr></hr>
+                    <div class="pull-right">
+			<img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/" class="img-circle" />
                     </div>    
-                </div></div></div></div>
-
-    <hr></hr><hr></hr>
+                </div>
+		<div class="col-md-4">
+			<h3 class="text-info">
+				Start a new group<hr></hr>
+			</h3>
+                    <form class="form-horizontal" role="form" method="post" action="navigate.php">
+				<div class="form-group">
+					 
+<!--					<label for="inputEmail3" class="col-sm-2 control-label">
+						Email
+					</label>-->
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="inputgroup" name="inputgroup" placeholder="Group Name" required autofocus />
+                                                <input type="hidden" class="form-control" id="createdby" name="createdby" value="<?php echo $user->get_username() ?>" />
+					</div>
+				</div>
+<!--				<div class="form-group">
+					 
+					<label for="inputPassword3" class="col-sm-2 control-label">
+						Password
+					</label>
+					<div class="col-sm-10">
+						<input type="password" class="form-control" id="inputPassword3" />
+					</div>
+				</div>-->
+<!--				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<div class="checkbox">
+							 
+							<label>
+								<input type="checkbox" /> Remember me
+							</label>
+						</div>
+					</div>
+				</div>-->
+				<div class="form-group">
+					<div class="col-sm-10">
+						 
+						<button type="submit" class="btn btn-default" name="op" value="creategroup">
+							Create
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-5">
+		</div>
+	</div>
+</div>
+    <hr></hr>
     <div class="container">           
         <footer>
             <p>&copy; 2015 Company, Inc.</p>
