@@ -8,7 +8,30 @@ if(!isset($_SESSION['user'])) {
 }
     
 ?>
-
+<?php
+	if(!empty($_POST["save"])) {
+		$conn = mysql_connect("localhost","root","");
+		mysql_select_db("splitnshare",$conn);
+		$itemCount = count($_POST["member_name"]);
+		$itemValues=0;
+		$query = "INSERT INTO group_members (member_name,member_email) VALUES ";
+		$queryValue = "";
+		for($i=0;$i<$itemCount;$i++) {
+			if(!empty($_POST["member_name"][$i]) || !empty($_POST["member_email"][$i])) {
+				$itemValues++;
+				if($queryValue!="") {
+					$queryValue .= ",";
+				}
+				$queryValue .= "('" . $_POST["member_name"][$i] . "', '" . $_POST["member_email"][$i] . "')";
+			}
+		}
+		$sql = $query.$queryValue;
+		if($itemValues!=0) {
+			$result = mysql_query($sql);
+			if(!empty($result)) $message = "Added Successfully.";
+		}
+	}
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -27,11 +50,8 @@ if(!isset($_SESSION['user'])) {
     <link href="css/signin.css" rel="stylesheet">
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
     
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -39,7 +59,23 @@ if(!isset($_SESSION['user'])) {
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-  </head>
+    <SCRIPT>
+  function addMore() {
+          $("<DIV>").load("input.php", function() {
+                          $("#product").append($(this).html());
+          });	
+  }
+  function deleteRow() {
+          $('DIV.product-item').each(function(index, item){
+                  jQuery(':checkbox', this).each(function () {
+              if ($(this).is(':checked')) {
+                                  $(item).remove();
+              }
+          });
+          });
+  }
+    </SCRIPT>
+    </head>
 
   <body>
 
@@ -100,49 +136,47 @@ if(!isset($_SESSION['user'])) {
 			<img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/" class="img-circle" />
                     </div>    
                 </div>
-		<div class="col-md-4">
+		<div class="col-md-5">
 			<h3 class="text-info">
 				Start a new group<hr></hr>
 			</h3>
                     <form class="form-horizontal" role="form" method="post" action="navigate.php">
 				<div class="form-group">
-					 
-<!--					<label for="inputEmail3" class="col-sm-2 control-label">
-						Email
-					</label>-->
-					<div class="col-sm-10">
+
+					<div class="col-sm-12">
 						<input type="text" class="form-control" id="inputgroup" name="inputgroup" placeholder="Group Name" required autofocus />
                                                 <input type="hidden" class="form-control" id="createdby" name="createdby" value="<?php echo $user->get_username() ?>" />
 					</div>
 				</div>
-<!--				<div class="form-group">
-					 
-					<label for="inputPassword3" class="col-sm-2 control-label">
-						Password
-					</label>
-					<div class="col-sm-10">
-						<input type="password" class="form-control" id="inputPassword3" />
-					</div>
-				</div>-->
-<!--				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
-						<div class="checkbox">
-							 
-							<label>
-								<input type="checkbox" /> Remember me
-							</label>
-						</div>
-					</div>
-				</div>-->
 				<div class="form-group">
-					<div class="col-sm-10">
-						 
-						<button type="submit" class="btn btn-default" name="op" value="creategroup">
+					<div class="col-sm-12">
+                                                <button type="submit" class="btn btn-default" name="op" value="creategroup">    
 							Create
 						</button>
+                                                <?php if (@$_GET['success'] == "yes") { ?>
+                                                <div class="text-success">Group created successfully. Please add group members below.</div>
+                                                <?php } ?>
 					</div>
 				</div>
 			</form>
+                        <?php if (@$_GET['success'] == "yes") { ?>
+                    <FORM name="frmProduct" method="post" action="">
+                        <DIV id="product">
+                                <?php require_once("input.php") ?>
+                        </DIV>
+                        <DIV class="btn-action float-clear">
+                                <input type="button" class="btn btn-primary" name="add_item" value="Add More" onClick="addMore();" />
+                                <input type="button" class="btn btn-danger" name="del_item" value="Delete" onClick="deleteRow();" />
+                                <span class="success"><?php if (isset($message)) {
+                            echo $message;
+                        } ?></span>
+                        </DIV>
+                        <hr></hr>
+                        <DIV class="form-group">
+                                <input type="submit" class="btn btn-success" name="save" value="Save" />
+                            </DIV>
+                    </FORM>
+                    <?php } ?>    
 		</div>
 		<div class="col-md-5">
 		</div>

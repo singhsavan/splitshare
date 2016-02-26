@@ -137,6 +137,7 @@ class UserController {
         } 
     }
     
+    
     public function authenticate($u, $p){
         $authentic = false;
         $password = md5($p);

@@ -11,7 +11,7 @@ switch ($op) {
         $username = $_POST['user'];
         $password = $_POST['pass'];
         if ($user_controller->login($username, $password) == 'true') {
-            header("Location:main.php");
+            header("Location:create_group.php");
         } 
         else header("Location:login.php?err=1");
         break;
@@ -36,7 +36,7 @@ switch ($op) {
         $createdby=$_POST['createdby'];
         if ($user_controller->create_group($name, $createdby)== false){
             header("Location:create_events.php?err=2");
-        } else header("Location:main.php");
+        } else header("Location:create_group.php?success=yes");
         break;
     
     case 'Save':
