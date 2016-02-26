@@ -28,8 +28,48 @@ if(!isset($_SESSION['user'])) {
 		$sql = $query.$queryValue;
 		if($itemValues!=0) {
 			$result = mysql_query($sql);
-			if(!empty($result)) $message = "Added Successfully.";
-		}
+			if(!empty($result)) {
+                            $message = "Added Successfully.";
+                            require 'PHPMailer-master/PHPMailerAutoload.php';
+
+                            $mail = new PHPMailer;
+
+//$mail->SMTPDebug = 3;                               // Enable verbose debug output
+
+                            $mail->isSMTP();                                      // Set mailer to use SMTP
+                            $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+                            $mail->SMTPAuth = true;                               // Enable SMTP authentication
+                            $mail->Username = 'askuofr@gmail.com';                 // SMTP username
+                            $mail->Password = 'savanmanoj';                           // SMTP password
+                            $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+                            $mail->Port = 465;                                    // TCP port to connect to
+
+                            $mail->setFrom('from@example.com', 'Mailer');
+                            for($i=0;$i<$itemCount;$i++) {
+                                $mail->addAddress($_POST["member_email"][$i], $_POST["member_name"][$i]);     // Add a recipient
+                            }
+                            $mail->addReplyTo('', '');
+                            $mail->addCC('');
+                            $mail->addBCC('');
+
+                            $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+                            $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+                            $mail->isHTML(true);                                  // Set email format to HTML
+
+                            $mail->Subject = 'Test to send email using phpmailer';
+                            $mail->Body = 'This is the HTML message body <b>in bold!</b>';
+                            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+                            if (!$mail->send()) {
+                                echo 'Message could not be sent.';
+                                echo 'Mailer Error: ' . $mail->ErrorInfo;
+                            } else {
+                                $mailmessage = "Invitaion sent to the ggroup members";
+                                header( "refresh:7;url=main.php");
+                            }
+                            
+                        }
+    }
 	}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -129,74 +169,81 @@ if(!isset($_SESSION['user'])) {
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
         <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-3">
+            <div class="row">
+                <div class="col-md-3">
                     <hr></hr>
                     <div class="pull-right">
-			<img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/" class="img-circle" />
+                        <img alt="Bootstrap Image Preview" src="http://lorempixel.com/140/140/" class="img-circle" />
                     </div>    
                 </div>
-		<div class="col-md-5">
-			<h3 class="text-info">
-				Start a new group<hr></hr>
-			</h3>
+                <div class="col-md-5">
+                    <h3 class="text-info">
+                        Start a new group<hr></hr>
+                    </h3>
                     <form class="form-horizontal" role="form" method="post" action="navigate.php">
-				<div class="form-group">
+                        <div class="form-group">
 
-					<div class="col-sm-12">
-						<input type="text" class="form-control" id="inputgroup" name="inputgroup" placeholder="Group Name" required autofocus />
-                                                <input type="hidden" class="form-control" id="createdby" name="createdby" value="<?php echo $user->get_username() ?>" />
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-sm-12">
-                                                <button type="submit" class="btn btn-default" name="op" value="creategroup">    
-							Create
-						</button>
-                                                <?php if (@$_GET['success'] == "yes") { ?>
-                                                <div class="text-success">Group created successfully. Please add group members below.</div>
-                                                <?php } ?>
-					</div>
-				</div>
-			</form>
-                        <?php if (@$_GET['success'] == "yes") { ?>
-                    <FORM name="frmProduct" method="post" action="">
-                        <DIV id="product">
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="inputgroup" name="inputgroup" placeholder="Group Name" required autofocus />
+                                <input type="hidden" class="form-control" id="createdby" name="createdby" value="<?php echo $user->get_username() ?>" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <button type="submit" class="btn btn-default" name="op" value="creategroup">    
+                                    Create
+                                </button>
+                                <?php if (@$_GET['success'] == "yes") { ?>
+                                    <div class="text-success">Group created successfully. Please add group members below.</div>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </form>
+                    <?php if (@$_GET['success'] == "yes") { ?>
+                        <FORM name="frmProduct" method="post" action="">
+                            <DIV id="product">
                                 <?php require_once("input.php") ?>
-                        </DIV>
-                        <DIV class="btn-action float-clear">
+                            </DIV>
+                            <DIV class="btn-action float-clear">
                                 <input type="button" class="btn btn-primary" name="add_item" value="Add More" onClick="addMore();" />
                                 <input type="button" class="btn btn-danger" name="del_item" value="Delete" onClick="deleteRow();" />
-                                <span class="success"><?php if (isset($message)) {
-                            echo $message;
-                        } ?></span>
-                        </DIV>
-                        <hr></hr>
-                        <DIV class="form-group">
+                                <span class="text-success"><?php
+                                    if (isset($message)) {
+                                        echo $message;
+                                    }
+                                    ?></span>
+                                <span class="text-success"><?php
+                                    if (isset($mailmessage)) {
+                                        echo $mailmessage;
+                                    }
+                                    ?></span>
+                            </DIV>
+                            <hr></hr>
+                            <DIV class="form-group">
                                 <input type="submit" class="btn btn-success" name="save" value="Save" />
                             </DIV>
-                    </FORM>
-                    <?php } ?>    
-		</div>
-		<div class="col-md-5">
-		</div>
-	</div>
-</div>
-    <hr></hr>
-    <div class="container">           
-        <footer>
-            <p>&copy; 2015 Company, Inc.</p>
-        </footer>
-    </div> <!-- /container -->
+                        </FORM>
+                        <?php } ?>    
+                </div>
+                <div class="col-md-5">
+                </div>
+            </div>
+        </div>
+        <hr></hr>
+        <div class="container">           
+            <footer>
+                <p>&copy; 2015 Company, Inc.</p>
+            </footer>
+        </div> <!-- /container -->
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+        <script src="js/bootstrap.min.js"></script>
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>
