@@ -30,6 +30,7 @@ if(!isset($_SESSION['user'])) {
             <script src="../../assets/js/ie8-responsive-file-warning.js"></script>
         <![endif]-->
         <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+            
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements
         and media queries -->
         <!--[if lt IE 9]>
@@ -85,55 +86,66 @@ if(!isset($_SESSION['user'])) {
     </nav>        <!-- Main jumbotron for a primary marketing message or call to action
         -->
         <div class="jumbotron">
-            <div class="container">
-                <h1>Hello, world!</h1>
-                <p>This is a template for a simple marketing or informational website. It
-                    includes a large callout called a jumbotron and three supporting pieces
-                    of content. Use it as a starting point to create something more unique.</p>
-                <p>
-                    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more »</a>
-                </p>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3" style="border: 1px solid #e3e3e3; height: 100vh">
+                        <h3>
+                            h3. Lorem ipsum dolor sit amet.
+                        </h3>
+                    </div>
+                    <div class="col-md-6" style="border: 1px solid #e3e3e3; height: 100vh">
+                        <div class="row">
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            ...
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" style="border: 1px solid #e3e3e3; height: 10%">
+                                <ol class="nav navbar-nav navbar-right">
+                                    <li>
+                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Add a bill</button>
+                                    </li>
+                                        
+                                    <li><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> Settle up</button></li>
+                                </ol> 
+                            </div>
+                            
+                            <h3>
+                            h3. Lorem ipsum dolor sit amet.
+                            </h3>
+                            </div>
+                        </div>
+                        <h3>
+                            h3. Lorem ipsum dolor sit amet.
+                        </h3>
+                    </div>
+                    <div class="col-md-3" style="border: 1px solid #e3e3e3; height: 100vh">
+                        <h3>
+                            h3. Lorem ipsum dolor sit amet.
+                        </h3>
+                    </div>
+                </div>
             </div>
+            
         </div>
-        <div class="section section-success"><div class="container"><div class="row"><div class="col-md-3"></div><div class="col-md-6"></div><div class="col-md-3"></div></div></div></div><div class="container">
-            <!-- Example row of columns -->
-            <div class="row">
-                <div class="col-md-4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus
-                        ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo
-                        sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed
-                        odio dui.</p>
-                    <p>
-                        <a class="btn btn-default" href="#" role="button">View details »</a>
-                    </p>
-                </div>
-                <div class="col-md-4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus
-                        ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo
-                        sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed
-                        odio dui.</p>
-                    <p>
-                        <a class="btn btn-default" href="#" role="button">View details »</a>
-                    </p>
-                </div>
-                <div class="col-md-4">
-                    <h2>Heading</h2>
-                    <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas
-                        eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus,
-                        tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum
-                        massa justo sit amet risus.</p>
-                    <p>
-                        <a class="btn btn-default" href="#" role="button">View details »</a>
-                    </p>
-                </div>
-            </div>
-            <hr>
+        <div class="container">           
             <footer>
-                <p>© 2015 Company, Inc.</p>
+                <p>&copy; 2015 Company, Inc.</p>
             </footer>
         </div>
+        
         <!-- /container -->
         <!-- Bootstrap core JavaScript==================================================-
         ->

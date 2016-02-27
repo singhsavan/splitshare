@@ -64,13 +64,13 @@ if(!isset($_SESSION['user'])) {
                                 echo 'Message could not be sent.';
                                 echo 'Mailer Error: ' . $mail->ErrorInfo;
                             } else {
-                                $mailmessage = "Invitaion sent to the ggroup members";
+                                $mailmessage = "Invitaion sent to the group members";
                                 header( "refresh:7;url=main.php");
                             }
                             
-                        }
     }
 	}
+        }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -228,6 +228,7 @@ if(!isset($_SESSION['user'])) {
                 <div class="col-md-5">
                 </div>
             </div>
+        </div>
         </div>
         <hr></hr>
         <div class="container">           
