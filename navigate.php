@@ -11,7 +11,7 @@ switch ($op) {
         $username = $_POST['user'];
         $password = $_POST['pass'];
         if ($user_controller->login($username, $password) == 'true') {
-            header("Location:main.php");
+            header("Location:dashboard1.php");
         } 
         else header("Location:login.php?err=1");
         break;
@@ -34,7 +34,8 @@ switch ($op) {
 //        $group_member=$_POST['member1'];
 //        $email=$_POST['email1'];
         $createdby=$_POST['createdby'];
-        if ($user_controller->create_group($name, $createdby)== false){
+        $email_id=$_POST['email_id'];
+        if ($user_controller->create_group($name, $createdby, $email_id)== false){
             header("Location:create_events.php?err=2");
         } else header("Location:create_group.php?group=$name&success=yes");
         break;
@@ -47,6 +48,16 @@ switch ($op) {
             header("Location:create_events.php?err=2");
         } else header("Location:main.php");
         break;
+    
+    case 'Submit':
+        $amount=$_POST['exampleInputAmount'];
+        $desc=$_POST['exampleInputdesc'];
+        $username=$_POST['exampleInputusername'];
+        $groupname=$_POST['exampleInputgroupname'];
+        if ($user_controller->add_expense($amount, $desc, $username, $groupname)== false){
+            header("Location:create_events.php?err=2");
+        } else header("Location:main.php?group=$groupname");
+        break;    
         
     case 'REGISTER':
         $studentid=$_POST['studentid'];

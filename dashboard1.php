@@ -118,7 +118,7 @@ if(!isset($_SESSION['user'])) {
                                                         <?php
                                                         while ($row = $result1->fetch_object()) {
                                                             print "<tr> <td>";
-                                                            ?> <a href="main.php?group_member=<?php echo $row->member_name; ?>&group=<?php echo $row->member_group; ?>"><?php echo $row->member_name; ?></a>
+                                                            ?> <a href=""><?php echo $row->member_name; ?></a>
                                                             <?php
 //                                                print "</td> </tr>";
                                                         }
@@ -197,153 +197,10 @@ if(!isset($_SESSION['user'])) {
                                                                 </div>    -->
                             </div>
                         </div>  
-                        <div> 
-                        <?php
-                        if(isset($_GET['group_member']) && isset($_GET['group'])) {
-                                $group_member = $_GET['group_member'];
-                        $result2 = $user->get_memberdetails($group_member);
-                        ?>
-                            <div class="panel panel-default">
-                                    <!--<div class="panel-heading"><h3>Object Store</h3></div>-->
-                                    <div class="panel-body">
-                                        <table class="table table-condensed" style="border-collapse:collapse;">
-
-                                            <thead>
-                                                <tr><th>&nbsp;</th>
-                                                    <th>Date and Time</th>
-                                                    <th>Description</th>
-                                                    <th>Amount</th>
-                                                    <th>Name</th>
-                                                    <!--<th>Status</th>-->
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                               <?php
-                        if ($result2->num_rows > 0) {
-                            while ($row = $result2->fetch_object()) {
-                                ?>
-                                                <tr data-toggle="collapse" data-target="#<?php echo $row->expense_id; ?>" class="accordion-toggle">
-                  <td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>
-                  <td><?php echo $row->expense_date; ?></td>
-            <td><?php echo $row->expense_desc; ?></td>
-            <td><?php echo $row->expense_amount; ?></td>
-            <td><?php echo $row->expense_by; ?></td>
-            </tr>
-            <tr>
-            <td colspan="12" class="hiddenRow"><div class="accordian-body collapse" id="<?php echo $row->expense_id; ?>">
-                    <?php echo $row->expense_desc; ?></td></tr><?php
-            }
-            } ?>
-            </tbody>
-            </table></div>
-        
-                        </div><?php }
-                                    else {
-                        $group_id = $_GET['group'];
-                        $result2 = $user->get_expense($group_id);
-                        ?> <div class="panel panel-default">
-                                    <!--<div class="panel-heading"><h3>Object Store</h3></div>-->
-                                    <div class="panel-body">
-                                        <table class="table table-condensed" style="border-collapse:collapse;">
-
-                                            <thead>
-                                                <tr><th>&nbsp;</th>
-                                                    <th>Date and Time</th>
-                                                    <th>Description</th>
-                                                    <th>Amount</th>
-                                                    <th>Name</th>
-                                                    <!--<th>Status</th>-->
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                               <?php
-                        if ($result2->num_rows > 0) {
-                            while ($row = $result2->fetch_object()) {
-                                ?>
-                                                <tr data-toggle="collapse" data-target="#<?php echo $row->expense_id; ?>" class="accordion-toggle">
-                  <td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>
-                  <td><?php echo $row->expense_date; ?></td>
-            <td><?php echo $row->expense_desc; ?></td>
-            <td><?php echo $row->expense_amount; ?></td>
-            <td><?php echo $row->expense_by; ?></td>
-            </tr>
-            <tr>
-            <td colspan="12" class="hiddenRow"><div class="accordian-body collapse" id="<?php echo $row->expense_id; ?>">
-                    <table class="table table-striped"><thead><tr><td>
-                                    <div class="row">
-                                  <div class="col-md-12"><span class="glyphicon glyphicon-list">  <?php echo $row->expense_desc; ?></span></div><br>
-                                    <div class="col-md-12"><span class="glyphicon glyphicon-usd">  <?php echo $row->expense_amount; ?></span></div><br>
-                                    <div class="col-md-12"><span>Added by <?php echo $row->expense_by; ?> on <?php echo $row->expense_date; ?></span></div><br>
-                                    <div class="col-md-12"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit bill</button></div>
-                                    </div>
-                    </td></tr>
-                                    <tr><td>
-                                            <?php
-                            $group_id = $_GET['group'];
-                            $balance = $user->get_totalgroupmembers($group_id);
-                            if ($balance->num_rows > 0) {
-                                while ($row = $balance->fetch_object()) {
-                                    ?>
-                                    <div class="well well-sm"><span class="glyphicon glyphicon-user"></span><?php 
-                                    if ($row->balance_value < 0) {
-                                        echo $row->balance_name;
-                                        echo " gets back ";
-                                        echo $row->balance_value;
-                                    }
-                                    elseif ($row->balance_value > 0) {
-                                        echo $row->balance_name;
-                                        echo " owes ";
-                                        echo $row->balance_value;
-                                    }
-                                    ?>
-                                    </div>
-                                    <?php
-                                }
-                            }
-                            ?>
-                                <div class="col-md-12"><span class="glyphicon glyphicon-user">  <?php echo $row->expense_by; ?> paid $<?php echo $row->expense_amount; ?> and owes </span></div>
-                                <div class="col-md-12"><span class="glyphicon glyphicon-user">  <?php echo $row->expense_by; ?> paid $<?php echo $row->expense_amount; ?> and owes </span></div></p>
-                                </td></tr>
-                    
-                    </table>    
-            </td></tr><?php
-            }
-            } ?>
-            </tbody>
-            </table></div>
-        
-          </div> <?php } ?>
-          <!--<td> created</td>-->
-                        
-                    </div></div>
+                    </div>
                     <div class="col-md-3" style="border: 1px solid #e3e3e3; background-color: white; padding: 0">
                         <br></br><br></br>
-                        <div class="h4">Group balances</div>
-                            <?php
-                            $group_id = $_GET['group'];
-                            $balance = $user->get_balance($group_id);
-                            if ($balance->num_rows > 0) {
-                                while ($row = $balance->fetch_object()) {
-                                    ?>
-                                    <div class="well well-sm"><span class="glyphicon glyphicon-user"></span><?php 
-                                    if ($row->balance_value < 0) {
-                                        echo $row->balance_name;
-                                        echo " gets back ";
-                                        echo $row->balance_value;
-                                    }
-                                    elseif ($row->balance_value > 0) {
-                                        echo $row->balance_name;
-                                        echo " owes ";
-                                        echo $row->balance_value;
-                                    }
-                                    ?>
-                                    </div>
-                                    <?php
-                                }
-                            }
-                            ?>
-                            
-                        </div>
+                        
                     </div>
                 </div>
             </div>

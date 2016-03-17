@@ -14,7 +14,9 @@ if(!isset($_SESSION['user'])) {
 		mysql_select_db("splitnshare",$conn);
 		$itemCount = count($_POST["member_name"]);
 		$itemValues=0;
-		$query = "INSERT INTO group_members (member_name,member_email) VALUES ";
+                $group_name=$_GET['group'];
+		$query = "INSERT INTO group_members (member_name,member_email,member_group) VALUES ";
+                $query1 = "INSERT INTO balance (balance_name, group_name) select member_name, member_group from group_members where member_group = '$group_name'";
 		$queryValue = "";
 		for($i=0;$i<$itemCount;$i++) {
 			if(!empty($_POST["member_name"][$i]) || !empty($_POST["member_email"][$i])) {
@@ -22,12 +24,13 @@ if(!isset($_SESSION['user'])) {
 				if($queryValue!="") {
 					$queryValue .= ",";
 				}
-				$queryValue .= "('" . $_POST["member_name"][$i] . "', '" . $_POST["member_email"][$i] . "')";
+				$queryValue .= "('" . $_POST["member_name"][$i] . "', '" . $_POST["member_email"][$i] . "', '" . @$_GET['group'] . "' )";
 			}
 		}
 		$sql = $query.$queryValue;
 		if($itemValues!=0) {
 			$result = mysql_query($sql);
+                        $result1 = mysql_query($query1);
 			if(!empty($result)) {
                             $message = "Added Successfully.";
                             require 'PHPMailer-master/PHPMailerAutoload.php';
@@ -45,19 +48,22 @@ if(!isset($_SESSION['user'])) {
                             $mail->Port = 465;                                    // TCP port to connect to
 
                             $mail->setFrom('from@example.com', 'Mailer');
-                            for($i=0;$i<$itemCount;$i++) {
-                                $mail->addAddress($_POST["member_email"][$i], $_POST["member_name"][$i]);     // Add a recipient
-                            }
+                            //$mail->addAddress('tofiq.maredia@mailinator.com', 'tofiq');
+                            //$mail->addAddress('alina@mailinator.com', 'alina');
+                                
+                            
                             $mail->addReplyTo('', '');
-                            $mail->addCC('');
+                            for($i=0;$i<$itemCount;$i++) {
+                            $mail->addCC($_POST["member_email"][$i], $_POST["member_name"][$i]);
+                            }
                             $mail->addBCC('');
 
                             $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
                             $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
                             $mail->isHTML(true);                                  // Set email format to HTML
 
-                            $mail->Subject = 'Test to send email using phpmailer';
-                            $mail->Body = 'This is the HTML message body <b>in bold!</b>';
+                            $mail->Subject = $user->get_username() . ' invites you to join SplitNShare';
+                            $mail->Body = $user->get_username() . ' invites you to join SplitNShare<hr></hr><hr></hr><a href="mailto:http://localhost/SplitNShare/register.php">SplitNShare</a>';
                             $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
                             if (!$mail->send()) {
@@ -186,6 +192,7 @@ if(!isset($_SESSION['user'])) {
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="inputgroup" name="inputgroup" placeholder="Group Name" required autofocus />
                                 <input type="hidden" class="form-control" id="createdby" name="createdby" value="<?php echo $user->get_username() ?>" />
+                                <input type="hidden" class="form-control" id="email_id" name="email_id" value="<?php echo $user->get_useremail() ?>" />
                             </div>
                         </div>
                         <div class="form-group">

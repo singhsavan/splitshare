@@ -126,6 +126,43 @@ return $this->link;
         return $this->usertype;
     }
     
+    function get_groups() {
+        $sql = "SELECT * from group_members WHERE member_name ='$this->username'";
+        $this->group = mysqli_query($this->db_connect(), $sql);
+        return $this->group;
+    }
+    function get_memberdetails($member) {
+        $sql = "SELECT * from expense WHERE expense_by ='$member'";
+        $this->groupmember = mysqli_query($this->db_connect(), $sql);
+        return $this->groupmember;
+    }
+    
+    function get_group_members($id) {
+        $sql = "SELECT * from group_members WHERE member_group ='$id'";
+        $this->group_members = mysqli_query($this->db_connect(), $sql);
+        return $this->group_members;
+    }
+    
+    function get_expense($group_id) {
+        $sql = "SELECT * from expense where group_name = '$group_id'";
+        $this->expense = mysqli_query($this->db_connect(), $sql);
+        return $this->expense;
+    }
+    
+    function get_balance($group_id) {
+        $sql = "SELECT * from balance where group_name = '$group_id'";
+        $this->balance = mysqli_query($this->db_connect(), $sql);
+        return $this->balance;
+    }
+    
+    function get_useremail() {
+        $sql = "SELECT * from users WHERE username ='$this->username'";
+        $result = mysqli_query($this->db_connect(), $sql);
+        $user_data = mysqli_fetch_array($result);
+        $this->usertype = $user_data['email_address'];
+        return $this->usertype;
+    }
+    
     function get_id(){
         $sql = "SELECT * from users WHERE username ='$this->username'";
         $result = mysqli_query($this->db_connect(), $sql);
