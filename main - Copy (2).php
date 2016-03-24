@@ -148,7 +148,7 @@ if (!isset($_SESSION['user'])) {
                             </table>
                         </div>    
                     </div>
-                    <div class="col-md-6" style="border: 1px solid #e3e3e3; background-color: white; min-height: 100vh; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                    <div class="col-md-6" style="border: 1px solid #e3e3e3; background-color: white; height: 100vh; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
                         <div class="row">
                             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                 <div class="modal-dialog" role="document">
@@ -247,15 +247,13 @@ if (!isset($_SESSION['user'])) {
                                                                                 <div class="col-md-12 h5"><span class="glyphicon glyphicon-list">  <?php echo $row->expense_desc; ?></span></div><br>
                                                                                 <div class="col-md-12 h5"><span class="glyphicon glyphicon-usd">  <?php echo $row->expense_amount; ?></span></div><br>
                                                                                 <div class="col-md-12 h5"><span>Added by <?php echo $row->expense_by; ?> on <?php echo $row->expense_date; ?></span></div><br>
-                                                                                <div class="col-md-12 h5">
-                                                                                    <?php
-                                                                                    if ($row->expense_by == $user->get_username()) { ?>
-                                                                                    <button type="button" id="edit_button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit bill</button></div>
-                                                                                    <?php }             
-                                                                                    else {?> <button type="button" id="edit_button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal" disabled="">Edit bill</button></div>
-                                                                                    <?php } ?>
+                                                                                <div class="col-md-12 h5"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit bill</button></div>
+                                                                            
+                                                                        
+                                                                             
                                                                         <div class="col-md-12"><span class="glyphicon glyphicon-user"> <?php echo $row->expense_by; ?> paid $<?php echo $row->expense_amount; ?> and owes $<?php echo ($row->expense_amount) / 6; ?></span></div>
-                                                                  </div></div></div>
+                                                                  </div></div></div>  
+                                                                    
                                                     
                                                     <?php
                                             }
@@ -290,26 +288,7 @@ if (!isset($_SESSION['user'])) {
                                                     <td><?php echo $row->expense_desc; ?></td>
                                                     <td><?php echo $row->expense_amount; ?></td>
                                                     <td><?php echo $row->expense_by; ?></td>
-                                                </tr>
-                                                    <div class="row">
-                        <div class="col-md-12">
-                         <div class="accordian-body collapse" id="<?php echo $row->expense_id; ?>">
-                                                            
-                                                                            
-                                                                                <div class="col-md-12 h5"><span class="glyphicon glyphicon-list">  <?php echo $row->expense_desc; ?></span></div><br>
-                                                                                <div class="col-md-12 h5"><span class="glyphicon glyphicon-usd">  <?php echo $row->expense_amount; ?></span></div><br>
-                                                                                <div class="col-md-12 h5"><span>Added by <?php echo $row->expense_by; ?> on <?php echo $row->expense_date; ?></span></div><br>
-                                                                                <div class="col-md-12 h5"><?php
-                                                                                    if ($row->expense_by == $user->get_username()) { ?>
-                                                                                    <button type="button" id="edit_button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit bill</button></div>
-                                                                                    <?php }             
-                                                                                    else {?> <button type="button" id="edit_button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal" disabled="">Edit bill</button></div>
-                                                                                    <?php } ?>
-                                                                            
-                                                                        
-                                                                             
-                                                                        <div class="col-md-12"><span class="glyphicon glyphicon-user"> <?php echo $row->expense_by; ?> paid $<?php echo $row->expense_amount; ?> and owes $<?php echo ($row->expense_amount) / 6; ?></span></div>
-                                                                  </div></div></div><?php
+                                                </tr><?php
                                             }
                                         }
                                         ?>
@@ -321,7 +300,115 @@ if (!isset($_SESSION['user'])) {
                                 </div></div>
                             
                         </div>
-                        </div>
+                        <div> 
+                            <?php
+                            if (isset($_GET['group_member']) && isset($_GET['group'])) {
+                                $group_member = $_GET['group_member'];
+                                $result2 = $user->get_memberdetails($group_member);
+                                ?>
+
+                                <table id="example" class="table table-hover" style="border-collapse:collapse;">
+
+                                    <thead>
+                                        <tr><th class="h5">&nbsp;</th>
+                                            <th class="h5">Date and Time</th>
+                                            <th class="h5">Description</th>
+                                            <th class="h5">Amount</th>
+                                            <th class="h5">Name</th>
+                                            <!--<th>Status</th>-->
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-primary h5">
+                                        <?php
+                                        if ($result2->num_rows > 0) {
+                                            while ($row = $result2->fetch_object()) {
+                                                ?>
+                                                <tr data-toggle="collapse" data-target="#<?php echo $row->expense_id; ?>" class="accordion-toggle">
+                                                    <td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>
+                                                    <td><?php echo $row->expense_date; ?></td>
+                                                    <td><?php echo $row->expense_desc; ?></td>
+                                                    <td><?php echo $row->expense_amount; ?></td>
+                                                    <td><?php echo $row->expense_by; ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="12" class="hiddenRow"><div class="accordian-body collapse" id="<?php echo $row->expense_id; ?>">
+                                                            <table class="table table-striped"><thead><tr><td>
+                                                                            <div class="row">
+                                                                                <div class="col-md-12 h5"><span class="glyphicon glyphicon-list">  <?php echo $row->expense_desc; ?></span></div><br>
+                                                                                <div class="col-md-12 h5"><span class="glyphicon glyphicon-usd">  <?php echo $row->expense_amount; ?></span></div><br>
+                                                                                <div class="col-md-12 h5"><span>Added by <?php echo $row->expense_by; ?> on <?php echo $row->expense_date; ?></span></div><br>
+                                                                                <div class="col-md-12 h5"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit bill</button></div>
+                                                                            </div>
+                                                                        </td></tr>
+                                                                    <tr>         
+                                                                        <td><div class="col-md-12"><span class="glyphicon glyphicon-user"> <?php echo $row->expense_by; ?> paid $<?php echo $row->expense_amount; ?> and owes $<?php echo ($row->expense_amount) / 6; ?></span></div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </thead>
+                                                            </table>    
+                                                    </td></tr><?php
+                                            }
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+
+                                <?php
+                            } else {
+                                $group_id = $_GET['group'];
+                                $result2 = $user->get_expense($group_id);
+                                ?> 
+                                <!--<div class="panel-heading"><h3>Object Store</h3></div>-->
+                                <table id ="example" class="table table-hover" style="border-collapse:collapse;">
+
+                                    <thead class="h5">
+                                        <tr><th class="h5">&nbsp;</th>
+                                            <th class="h5">Date and Time</th>
+                                            <th class="h5">Description</th>
+                                            <th class="h5">Amount</th>
+                                            <th class="h5">Name</th>
+                                            <!--<th>Status</th>-->
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-primary h5">
+                                        <?php
+                                        if ($result2->num_rows > 0) {
+                                            while ($row = $result2->fetch_object()) {
+                                                ?>
+                                                <tr data-toggle="collapse" data-target="#<?php echo $row->expense_id; ?>" class="accordion-toggle">
+                                                    <td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>
+                                                    <td><?php echo $row->expense_date; ?></td>
+                                                    <td><?php echo $row->expense_desc; ?></td>
+                                                    <td><?php echo $row->expense_amount; ?></td>
+                                                    <td><?php echo $row->expense_by; ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="12" class="hiddenRow"><div class="accordian-body collapse" id="<?php echo $row->expense_id; ?>">
+                                                            <table class="table table-striped"><thead><tr><td>
+                                                                            <div class="row">
+                                                                                <div class="col-md-12"><span class="glyphicon glyphicon-list">  <?php echo $row->expense_desc; ?></span></div><br>
+                                                                                <div class="col-md-12"><span class="glyphicon glyphicon-usd">  <?php echo $row->expense_amount; ?></span></div><br>
+                                                                                <div class="col-md-12"><span>Added by <?php echo $row->expense_by; ?> on <?php echo $row->expense_date; ?></span></div><br>
+                                                                                <div class="col-md-12"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit bill</button></div>
+                                                                            </div>
+                                                                        </td></tr>
+                                                                    <tr>         
+                                                                        <td><div class="col-md-12"><span class="glyphicon glyphicon-user"> <?php echo $row->expense_by; ?> paid $<?php echo $row->expense_amount; ?> and owes $<?php echo ($row->expense_amount) / 6; ?></span></div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </thead>
+                                                            </table>    
+                                                    </td></tr><?php
+                                            }
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+
+                            <?php } ?>
+                            <!--<td> created</td>-->
+
+                        </div></div>
                     <div class="col-md-3" style="border: 1px solid #e3e3e3; background-color: white; padding: 0; height:100vh; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
                         <br><br><br><br>
                         <div class="col-md-7" style="padding-left: 0">
@@ -389,14 +476,6 @@ if (!isset($_SESSION['user'])) {
             $('.collapse').on('show.bs.collapse', function () {
     $('.collapse.in').collapse('hide');
 });
-var table = $('#example').DataTable();
- 
-$('#example tbody').on( 'click', 'tr', function () {
-  var rowData = table.row( this ).data();
-  $("#exampleInputAmount").val(rowData[3]);
-  $("#exampleInputdesc").val(rowData[2]);
-  // ... do something with `rowData`
-} );
         </script>
 
     </body></html>

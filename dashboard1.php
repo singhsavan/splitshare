@@ -78,47 +78,50 @@ if(!isset($_SESSION['user'])) {
 
     </nav>        <!-- Main jumbotron for a primary marketing message or call to action
         -->
-        <div class="jumbotron">
+        <div class="jumbotron" style="background-color: white">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-3" style="border: 1px solid #e3e3e3; background-color: white; padding: 0">
-                        <b></br><br></br>
-                            <div class="col-md-4"></div>
-                            <div class="col-md-8" style="padding-right: 0">
+                    <div class="col-md-3" style="border: 1px solid #e3e3e3; background-color: white; padding: 0; height: 100vh; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                            <br>
+                            <div class="col-md-6"></div>
+                            <div id="dashboard" class="col-md-6 h4" style="padding-right: 0"><a href="dashboard1.php"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> Dashboard</a></div> 
+                            <br><br><br>
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6" style="padding-right: 0">
                                 <?php
                                 $result = $user->get_groups();
 
                                 if ($result->num_rows > 0) {
                                     ?>
-                                    <table class="table table-condensed small">
+                                    <table class="table table-condensed small table-hover">
                                         <thead>
                                             <tr>
-                                                <th class="danger">Group Name</th>
+                                                <th class="h5">Group Name</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody class="h5">
                                             <?php
                                             while ($row = $result->fetch_object()) {
                                                 //echo $row->event_name, ' ' , $row->event_description, '<br>';
                                                 //echo '<pre>', print_r($row[0]), '</pre>';
                                                 print "<tr> <td>";
-                                                ?> <a href="main.php?group=<?php echo $row->member_group; ?>" ><?php echo $row->member_group; ?></a>
+                                                ?> <a href="main.php?group=<?php echo $row->member_group; ?>"> <span class="glyphicon glyphicon-tag" aria-hidden="true"></span> <?php echo $row->member_group; ?></a>
                                                 <?php
 //                                    print "</td> </tr>";
                                                 $result1 = $user->get_group_members($row->member_group);
                                                 if ($result1->num_rows > 0) {
                                                     ?>
-                                                <table class="table table-condensed small">
+                                                <table class="table table-condensed small table-hover">
                                                     <thead>
                                                         <tr>
-                                                            <th class="success">Member Name</th>
+                                                            <th class="h5">Member Name</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
+                                                    <tbody class="h6">
                                                         <?php
                                                         while ($row = $result1->fetch_object()) {
                                                             print "<tr> <td>";
-                                                            ?> <a href=""><?php echo $row->member_name; ?></a>
+                                                            ?> <a href="main.php?group_member=<?php echo $row->member_name; ?>&group=<?php echo $row->member_group; ?>"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <?php echo $row->member_name; ?></a>
                                                             <?php
 //                                                print "</td> </tr>";
                                                         }
@@ -145,7 +148,7 @@ if(!isset($_SESSION['user'])) {
                                 </table>
                             </div>    
                     </div>
-                    <div class="col-md-6" style="border: 1px solid #e3e3e3; background-color: white">
+                    <div id="mainblock" class="col-md-6" style="border: 1px solid #e3e3e3; background-color: white; height: 100vh; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
                         <div class="row">
                             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                 <div class="modal-dialog" role="document">
@@ -187,18 +190,51 @@ if(!isset($_SESSION['user'])) {
                                 </div>
                             </div>
 
-                            <div class="col-md-12" id="groupexpense" style="padding-top: 2%; padding-bottom: 2%">
-                                <div class="col-md-8"></div>
-                                <div class="col-md-2"><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Add a bill</button></div>
-                                <div class="col-md-2"><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> Settle Up</button></div>
+                            <div class="col-md-12" id="groupexpense" style="padding-top: 2%; padding-bottom: 2%; background-color: #e3e3e3;border-bottom: solid 1px #ccc;">
+                                <div class="col-md-8 text-success h4">Dashboard</div>
+                                <div class="col-md-2"><button type="button" id="addbill_button" class="btn btn-danger" data-toggle="modal" data-target="#myModal"  disabled="disabled" title="Click on group to add bill"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Add a bill</button></div>
+                                <div class="col-md-2"><button type="button" id="settleup_button" class="btn btn-success"  disabled="disabled" title="Click on group to settle up"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> Settle Up</button></div>
                                 <!--                                <div class="btn-group pull-right">
                                                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Add a bill</button>
                                                                     <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> Settle Up</button>
                                                                 </div>    -->
                             </div>
+                            <div class="col-md-12" style="background-color: #e3e3e3; border-bottom: solid 1px #ccc">
+                            
+                            <?php
+                            $user_name = $user->get_username();
+                        $balance = $user->get_memberbalance($user_name);
+                        if ($balance->num_rows > 0) {
+                            while ($row = $balance->fetch_object()) {
+                                ?>
+                                <div class="col-md-4 text-center" ><div class="row">Total balance</div>
+                                <div class="row text-success h4">$ <?php echo $row->total_balance;
+                                ?></div></div>
+                                <?php
+                                if ($row->balance_value < 0) { ?>
+                                <div class="col-md-4 text-center" style="border-left: solid 1px #ccc"><div class="row">You owe</div>
+                                <div class="row text-success h4">$ <?php echo "0";
+                                ?></div></div>
+                                <div class="col-md-4 text-center" style="border-left: solid 1px #ccc"><div class="row">You are owed</div>
+                                <div class="row text-success h4">$ <?php echo $row->balance_value;
+                                ?></div></div>
+                                <?php
+                                } else if ($row->balance_value > 0) { ?>
+                                <div class="col-md-4 text-center" style="border-left: solid 1px #ccc"><div class="row">You owe</div>
+                                <div class="row text-success h4">$ <?php echo $row->balance_value;
+                                ?></div></div>
+                                <div class="col-md-4 text-center" style="border-left: solid 1px #ccc"><div class="row">You are owed</div>
+                                <div class="row text-success h4">$ <?php echo "0";
+                                ?></div></div> 
+                                <?php }
+
+                            }
+                        }
+                        ?>
+                            </div>
                         </div>  
                     </div>
-                    <div class="col-md-3" style="border: 1px solid #e3e3e3; background-color: white; padding: 0">
+                    <div class="col-md-3" style="border: 1px solid #e3e3e3; background-color: white; padding: 0; height:100vh; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
                         <br></br><br></br>
                         
                     </div>
@@ -224,6 +260,16 @@ if(!isset($_SESSION['user'])) {
         <script src="js/bootstrap.min.js"></script>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-       
+       <script>
+           
+       $("#dashboard")
+       .on( "click", function() {
+    var styles = {
+      backgroundColor : "#ddd",
+      fontWeight: ""
+    };
+    $( this ).css( styles );
+  });
+       </script>
     
 </body></html>

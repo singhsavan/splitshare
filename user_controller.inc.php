@@ -143,7 +143,7 @@ class UserController {
                             while ($row = $result4->fetch_object()) {
                                 $memberbalance = $row->membersum;
                                 $rembalance = $share - $memberbalance;
-                                $sql5 = "update balance set balance_value = '$rembalance' where group_name = '$groupname' and balance_name = '$row->expense_by'";
+                                $sql5 = "update balance set balance_value = '$rembalance', total_balance = '$row->membersum' where group_name = '$groupname' and balance_name = '$row->expense_by'";
                                 $result5 = mysqli_query($this->db, $sql5);
                                 }
                             }

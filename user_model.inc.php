@@ -137,6 +137,12 @@ return $this->link;
         return $this->groupmember;
     }
     
+    function get_memberbalance($member) {
+        $sql = "SELECT * from balance WHERE balance_name ='$member'";
+        $this->memberbalance = mysqli_query($this->db_connect(), $sql);
+        return $this->memberbalance;
+    }
+    
     function get_group_members($id) {
         $sql = "SELECT * from group_members WHERE member_group ='$id'";
         $this->group_members = mysqli_query($this->db_connect(), $sql);
