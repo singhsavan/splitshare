@@ -131,8 +131,8 @@ return $this->link;
         $this->group = mysqli_query($this->db_connect(), $sql);
         return $this->group;
     }
-    function get_memberdetails($member) {
-        $sql = "SELECT * from expense WHERE expense_by ='$member'";
+    function get_memberdetails($member, $group) {
+        $sql = "SELECT * from expense WHERE expense_by ='$member' AND group_name = '$group'";
         $this->groupmember = mysqli_query($this->db_connect(), $sql);
         return $this->groupmember;
     }
@@ -157,6 +157,11 @@ return $this->link;
     
     function get_balance($group_id) {
         $sql = "SELECT * from balance where group_name = '$group_id'";
+        $this->balance = mysqli_query($this->db_connect(), $sql);
+        return $this->balance;
+    }
+    function get_balance_name($group_id) {
+        $sql = "SELECT * from balance where group_name = '$group_id' AND balance_value > 0;";
         $this->balance = mysqli_query($this->db_connect(), $sql);
         return $this->balance;
     }

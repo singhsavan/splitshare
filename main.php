@@ -30,6 +30,11 @@ if (!isset($_SESSION['user'])) {
             <script src="../../assets/js/ie8-responsive-file-warning.js"></script>
         <![endif]-->
         <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+        <style type="text/css">
+        .selected{
+    background: gainsboro;
+}
+</style>
     </head><body>
         <!-- Fixed navbar -->
         <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -150,6 +155,47 @@ if (!isset($_SESSION['user'])) {
                     </div>
                     <div class="col-md-6" style="border: 1px solid #e3e3e3; background-color: white; min-height: 100vh; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
                         <div class="row">
+                            <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">Edit bill</h4>
+                                        </div>
+                                        <form role="form" data-toggle="validator" class="form-signin" method="post" action="navigate.php">
+                                            <div class="modal-body">
+
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Amount</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">$</div>
+                                                        <input type="text" class="form-control" name="exampleInputAmount" id="exampleInputAmount" placeholder="Amount" required autofocus>
+                                                        <div class="input-group-addon">.00</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputPassword1">Description</label>
+                                                    <input type="text" class="form-control" id="exampleInputdesc" name="exampleInputdesc" placeholder="Description" required>
+                                                    <input type="hidden" class="form-control" name="exampleInputusername" value="<?php echo $user->get_username() ?>"></input>    
+                                                    <input type="hidden" class="form-control" name="exampleInputgroupname" value="<?php echo $_GET['group'] ?>"></input> 
+                                                    <input type="hidden" class="form-control" name="expense_id" id="expense_id"></input>    
+                                                
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputFile">File input</label>
+                                                    <input type="file" id="exampleInputFile">
+                                                    <p class="help-block">Example block-level help text here.</p>
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                <input type="submit" name="op" class="btn btn-primary" value="Edit bill"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
@@ -189,7 +235,56 @@ if (!isset($_SESSION['user'])) {
                                     </div>
                                 </div>
                             </div>
+                            <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">Settle Up</h4>
+                                        </div>
+                                        <form role="form" data-toggle="validator" class="form-signin" method="post" action="navigate.php">
+                                            <div class="modal-body">
 
+                                                <div class="form-group">
+                                                    <label for="paidby">Paid by</label>
+                                                    <select class="form-control" id="user" name="user">
+                                                        <option></option>
+                                                        <?php
+                                                        $result3 = $user->get_balance_name($_GET['group']);
+                                                        if ($result3->num_rows > 0) {
+                                                            while ($row = $result3->fetch_object()) {
+                                                                ?>
+                                                                <option><?php echo $row->balance_name ?></option>
+                                                                <?php
+                                                            }
+                                                        } else {
+                                                            ?> <option>No user found</option><?php
+                                                        }
+                                                        ?>
+                                                    </select>
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="amount">Amount</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">$</div>
+                                                        <input type="text" class="form-control" name="exampleInputAmount" id="exampleInputAmount" placeholder="Amount" required autofocus>
+                                                        <div class="input-group-addon">.00</div>
+                                                        <input type="hidden" class="form-control" name="exampleInputusername" value="<?php echo $user->get_username() ?>"></input>    
+                                                        <input type="hidden" class="form-control" name="exampleInputgroupname" value="<?php echo $_GET['group'] ?>"></input>    
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                <input type="submit" name="op" class="btn btn-primary" value="Settle Up"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div class="col-md-12" id="groupexpense" style="padding-top: 2%; padding-bottom: 2%; background-color: #e3e3e3;border-bottom: solid 1px #ccc;">
                                 <div class="col-md-8 text-success"><h4><b>
                                             <?php
@@ -202,7 +297,7 @@ if (!isset($_SESSION['user'])) {
                                             }
                                             ?>    </b></h4></div>
                                 <div class="col-md-2"><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Add a bill</button></div>
-                                <div class="col-md-2"><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> Settle Up</button></div>
+                                <div class="col-md-2"><button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> Settle Up</button></div>
                                 <!--                                <div class="btn-group pull-right">
                                                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Add a bill</button>
                                                                     <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> Settle Up</button>
@@ -215,147 +310,160 @@ if (!isset($_SESSION['user'])) {
                                     <?php
                                     if (isset($_GET['group_member']) && isset($_GET['group'])) {
                                         $group_member = $_GET['group_member'];
-                                        $result2 = $user->get_memberdetails($group_member);
+                                        $result2 = $user->get_memberdetails($_GET['group_member'], $_GET['group']);
                                         ?>
-                                    <table id="example" class="table table-hover dataTable no-footer" style="border-collapse:collapse;" role="grid" aria-describedby="example_info">
+                                        <table id="example" class="table table-hover dataTable no-footer" style="border-collapse:collapse;" role="grid" aria-describedby="example_info">
 
-                                        <thead class="h5">
-                                            <tr role="row"><th class="h5 sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 22px;" aria-sort="ascending" aria-label="&amp;nbsp;: activate to sort column descending">&nbsp;</th>
-                                                <th class="h5 sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 152px;" aria-label="Date and Time: activate to sort column ascending">Date and Time</th>
-                                                <th class="h5 sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 119px;" aria-label="Description: activate to sort column ascending">Description</th>
-                                                <th class="h5 sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 87px;" aria-label="Amount: activate to sort column ascending">Amount</th>
-                                                <th class="h5 sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 72px;" aria-label="Name: activate to sort column ascending">Name</th></tr>    
-                                        </thead>
-                                        <tbody class="text-primary h5">
-                                            <?php
-                                        if ($result2->num_rows > 0) {
-                                            while ($row = $result2->fetch_object()) {
-                                                ?>
-                                            
-                                                <tr data-toggle="collapse" data-target="#<?php echo $row->expense_id; ?>" class="accordion-toggle">
-                                                    <td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>
-                                                    <td><?php echo $row->expense_date; ?></td>
-                                                    <td><?php echo $row->expense_desc; ?></td>
-                                                    <td><?php echo $row->expense_amount; ?></td>
-                                                    <td><?php echo $row->expense_by; ?></td>    
-                                                </tr>
-                                                   <div class="row">
-                        <div class="col-md-12">
-                         <div class="accordian-body collapse" id="<?php echo $row->expense_id; ?>">
-                                                            
-                                                                            
-                                                                                <div class="col-md-12 h5"><span class="glyphicon glyphicon-list">  <?php echo $row->expense_desc; ?></span></div><br>
-                                                                                <div class="col-md-12 h5"><span class="glyphicon glyphicon-usd">  <?php echo $row->expense_amount; ?></span></div><br>
-                                                                                <div class="col-md-12 h5"><span>Added by <?php echo $row->expense_by; ?> on <?php echo $row->expense_date; ?></span></div><br>
-                                                                                <div class="col-md-12 h5">
-                                                                                    <?php
-                                                                                    if ($row->expense_by == $user->get_username()) { ?>
-                                                                                    <button type="button" id="edit_button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit bill</button></div>
-                                                                                    <?php }             
-                                                                                    else {?> <button type="button" id="edit_button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal" disabled="">Edit bill</button></div>
-                                                                                    <?php } ?>
-                                                                        <div class="col-md-12"><span class="glyphicon glyphicon-user"> <?php echo $row->expense_by; ?> paid $<?php echo $row->expense_amount; ?> and owes $<?php echo ($row->expense_amount) / 6; ?></span></div>
-                                                                  </div></div></div>
-                                                    
-                                                    <?php
-                                            }
-                                        }
-                                        ?>
-                                    </tbody>
+                                            <thead class="h5">
+                                                <tr role="row"><th class="h5 sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 22px;" aria-sort="ascending" aria-label="&amp;nbsp;: activate to sort column descending">&nbsp;</th>
+                                                    <th class="h5 sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 152px;" aria-label="Date and Time: activate to sort column ascending">Date and Time</th>
+                                                    <th class="h5 sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 119px;" aria-label="Description: activate to sort column ascending">Description</th>
+                                                    <th class="h5 sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 87px;" aria-label="Amount: activate to sort column ascending">Amount</th>
+                                                    <th class="h5 sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 72px;" aria-label="Name: activate to sort column ascending">Name</th>
+                                                <th class="hidden" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 72px;" aria-label="Name: activate to sort column ascending">Expense Id</th></tr>    
+                                            </thead>
+                                            <tbody class="text-primary h5">
+                                                <?php
+                                                if ($result2->num_rows > 0) {
+                                                    while ($row = $result2->fetch_object()) {
+                                                        ?>
 
-                                            <!--<tr class=""><td valign="top" colspan="5" class="dataTables_empty">No data available in table</td></tr></tbody>-->
-                                    </table><?php 
-                                    
-                                    } else {
-                                $group_id = $_GET['group'];
-                                $result2 = $user->get_expense($group_id);
-                                ?> 
-                                <table id="example" class="table table-hover dataTable no-footer" style="border-collapse:collapse;" role="grid" aria-describedby="example_info">
-
-                                        <thead class="h5">
-                                            <tr role="row"><th class="h5 sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 22px;" aria-sort="ascending" aria-label="&amp;nbsp;: activate to sort column descending">&nbsp;</th>
-                                                <th class="h5 sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 152px;" aria-label="Date and Time: activate to sort column ascending">Date and Time</th>
-                                                <th class="h5 sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 119px;" aria-label="Description: activate to sort column ascending">Description</th>
-                                                <th class="h5 sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 87px;" aria-label="Amount: activate to sort column ascending">Amount</th>
-                                                <th class="h5 sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 72px;" aria-label="Name: activate to sort column ascending">Name</th></tr>
-                                        </thead>
-                                        <tbody class="text-primary h5">
-                                            <?php
-                                        if ($result2->num_rows > 0) {
-                                            while ($row = $result2->fetch_object()) {
-                                                ?>
-                                                <tr data-toggle="collapse" data-target="#<?php echo $row->expense_id; ?>" class="accordion-toggle">
-                                                    <td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>
-                                                    <td><?php echo $row->expense_date; ?></td>
-                                                    <td><?php echo $row->expense_desc; ?></td>
-                                                    <td><?php echo $row->expense_amount; ?></td>
-                                                    <td><?php echo $row->expense_by; ?></td>
-                                                </tr>
+                                                        <tr data-toggle="collapse" data-target="#<?php echo $row->expense_id; ?>" class="accordion-toggle">
+                                                            <td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>
+                                                            <td><?php echo $row->expense_date; ?></td>
+                                                            <td><?php echo $row->expense_desc; ?></td>
+                                                            <td><?php echo $row->expense_amount; ?></td>
+                                                            <td><?php echo $row->expense_by; ?></td>
+                                                            <td class="hidden"><?php echo $row->expense_id; ?></td>
+                                                        </tr>
                                                     <div class="row">
-                        <div class="col-md-12">
-                         <div class="accordian-body collapse" id="<?php echo $row->expense_id; ?>">
-                                                            
-                                                                            
-                                                                                <div class="col-md-12 h5"><span class="glyphicon glyphicon-list">  <?php echo $row->expense_desc; ?></span></div><br>
-                                                                                <div class="col-md-12 h5"><span class="glyphicon glyphicon-usd">  <?php echo $row->expense_amount; ?></span></div><br>
-                                                                                <div class="col-md-12 h5"><span>Added by <?php echo $row->expense_by; ?> on <?php echo $row->expense_date; ?></span></div><br>
-                                                                                <div class="col-md-12 h5"><?php
-                                                                                    if ($row->expense_by == $user->get_username()) { ?>
-                                                                                    <button type="button" id="edit_button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit bill</button></div>
-                                                                                    <?php }             
-                                                                                    else {?> <button type="button" id="edit_button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal" disabled="">Edit bill</button></div>
-                                                                                    <?php } ?>
-                                                                            
-                                                                        
-                                                                             
-                                                                        <div class="col-md-12"><span class="glyphicon glyphicon-user"> <?php echo $row->expense_by; ?> paid $<?php echo $row->expense_amount; ?> and owes $<?php echo ($row->expense_amount) / 6; ?></span></div>
-                                                                  </div></div></div><?php
-                                            }
-                                        }
-                                        ?>
-                                    </tbody>
+                                                        <div class="col-md-12">
+                                                            <div class="accordian-body collapse" id="<?php echo $row->expense_id; ?>">
 
-                                            <!--<tr class=""><td valign="top" colspan="5" class="dataTables_empty">No data available in table</td></tr></tbody>-->
-                                    </table> <?php }    
-                                    ?>
+
+                                                                <div class="col-md-12 well-sm"><span class="glyphicon glyphicon-list">  <?php echo $row->expense_desc; ?></span></div>
+                                                                <div class="col-md-12 well-sm"><span class="glyphicon glyphicon-usd">  <?php echo $row->expense_amount; ?></span></div>
+                                                                <div class="col-md-12 well-sm"><span>Added by <?php echo $row->expense_by; ?> on <?php echo $row->expense_date; ?></span></div>
+                                                                <div class="col-md-12 well-sm">
+                                                                    <?php if ($row->expense_by == $user->get_username()) { ?>
+                                                                            <button type="button" id="edit_button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal2">Edit bill</button>
+                                                                            <form method="post" action="navigate.php">
+                                                                                <input type="hidden" class="form-control" name="exampleInputusername" value="<?php echo $user->get_username() ?>"></input>    
+                                                                                <input type="hidden" class="form-control" name="exampleInputgroupname" value="<?php echo $_GET['group'] ?>"></input>
+                                                                                <input type="hidden" id="delete_expenseid" name="delete_expenseid" value=" <?php echo $row->expense_id; ?>" />   
+                                                                                <input type="submit" id="delete_button" class="btn btn-danger btn-sm" name="op" value="Delete bill"></button></form>
+                                                                <?php } else {
+                                                                    ?> <button type="button" id="edit_button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal2" disabled="">Edit bill</button>
+                                                                       <button type="submit" id="delete_button" class="btn btn-danger btn-sm" name="op" value="Delete bill" disabled="">Delete bill</button></div> 
+                                                                    <?php } ?>
+                                                            <div class="col-md-12 well-sm"><span class="glyphicon glyphicon-user"> <?php echo $row->expense_by; ?> paid $<?php echo $row->expense_amount; ?> and owes $<?php echo ($row->expense_amount) / 6; ?></span></div>
+                                                        </div></div>
+
+                                                    <?php
+                                                }
+                                            }
+                                            ?>
+                                            </tbody>
+
+                                                <!--<tr class=""><td valign="top" colspan="5" class="dataTables_empty">No data available in table</td></tr></tbody>-->
+                                        </table><?php
+                                    } else {
+                                        $group_id = $_GET['group'];
+                                        $result2 = $user->get_expense($group_id);
+                                            ?> 
+                                        <table id="example" class="table table-hover dataTable no-footer" style="border-collapse:collapse;" role="grid" aria-describedby="example_info">
+
+                                            <thead class="h5">
+                                                <tr role="row"><th class="h5 sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 22px;" aria-sort="ascending" aria-label="&amp;nbsp;: activate to sort column descending">&nbsp;</th>
+                                                    <th class="h5 sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 152px;" aria-label="Date and Time: activate to sort column ascending">Date and Time</th>
+                                                    <th class="h5 sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 119px;" aria-label="Description: activate to sort column ascending">Description</th>
+                                                    <th class="h5 sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 87px;" aria-label="Amount: activate to sort column ascending">Amount</th>
+                                                    <th class="h5 sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 72px;" aria-label="Name: activate to sort column ascending">Name</th>
+                                                    <th class="hidden" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 72px;" aria-label="Name: activate to sort column ascending">Expense Id</th></tr>    
+                                            </thead>
+                                            <tbody class="text-primary h5">
+    <?php
+    if ($result2->num_rows > 0) {
+        while ($row = $result2->fetch_object()) {
+            ?>
+                                                        <tr data-toggle="collapse" data-target="#<?php echo $row->expense_id; ?>" class="accordion-toggle">
+                                                            <td><button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"></span></button></td>
+                                                            <td><?php echo $row->expense_date; ?></td>
+                                                            <td><?php echo $row->expense_desc; ?></td>
+                                                            <td><?php echo $row->expense_amount; ?></td>
+                                                            <td><?php echo $row->expense_by; ?></td>
+                                                            <td class="hidden"><?php echo $row->expense_id; ?></td>
+                                                        </tr>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="accordian-body collapse" id="<?php echo $row->expense_id; ?>">
+
+
+                                                                <div class="col-md-12 well-sm"><span class="glyphicon glyphicon-list">  <?php echo $row->expense_desc; ?></span></div><br>
+                                                                <div class="col-md-12 well-sm"><span class="glyphicon glyphicon-usd">  <?php echo $row->expense_amount; ?></span></div><br>
+                                                                <div class="col-md-12 well-sm"><span>Added by <?php echo $row->expense_by; ?> on <?php echo $row->expense_date; ?></span></div><br>
+                                                                <div class="col-md-12 well-sm"><?php if ($row->expense_by == $user->get_username()) { ?>
+                                                                        <button type="button" id="edit_button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal2">Edit bill</button>
+                                                                    <form method="post" action="navigate.php">
+                                                                                <input type="hidden" class="form-control" name="exampleInputusername" value="<?php echo $user->get_username() ?>"></input>    
+                                                                                <input type="hidden" class="form-control" name="exampleInputgroupname" value="<?php echo $_GET['group'] ?>"></input>
+                                                                                <input type="hidden" id="delete_expenseid" name="delete_expenseid" value=" <?php echo $row->expense_id; ?>" />   
+                                                                                <input type="submit" id="delete_button" class="btn btn-danger btn-sm" name="op" value="Delete bill"></button></form>
+                                                                <?php } else {
+                                                                    ?> <button type="button" id="edit_button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal2" disabled="">Edit bill</button>
+                                                                       <button type="submit" id="delete_button" class="btn btn-danger btn-sm" name="op" value="Delete bill" disabled="">Delete bill</button></div> <br>
+                                                                <?php } ?>
+
+
+
+                                                            <div class="col-md-12 well-sm"><span class="glyphicon glyphicon-user"> <?php echo $row->expense_by; ?> paid $<?php echo $row->expense_amount; ?> and owes $<?php echo ($row->expense_amount) / 6; ?></span></div><br>
+                                                        </div></div></div><?php
+                                                            }
+                                                        }
+                                                        ?>
+                                            </tbody>
+
+                                                <!--<tr class=""><td valign="top" colspan="5" class="dataTables_empty">No data available in table</td></tr></tbody>-->
+                                        </table> <?php }
+                                                    ?>
                                 </div></div>
-                            
+
                         </div>
-                        </div>
+                    </div>
                     <div class="col-md-3" style="border: 1px solid #e3e3e3; background-color: white; padding: 0; height:100vh; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
                         <br><br><br><br>
                         <div class="col-md-7" style="padding-left: 0">
-                        <table class="table table-condensed small table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="h5">Group balances</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-primary h5">
-                                <?php
-                                $group_id = $_GET['group'];
-                                $balance = $user->get_balance($group_id);
-                                if ($balance->num_rows > 0) {
-                                    while ($row = $balance->fetch_object()) {
-                                        ?>
-                                        <tr><td><span class="glyphicon glyphicon-user"></span> <?php
-                                                if ($row->balance_value < 0) {
-                                                    echo $row->balance_name;
-                                                    echo " gets back ";
-                                                    echo $row->balance_value;
-                                                } elseif ($row->balance_value > 0) {
-                                                    echo $row->balance_name;
-                                                    echo " owes ";
-                                                    echo $row->balance_value;
+                            <table class="table table-condensed small table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="h5">Group balances</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-primary h5">
+<?php
+$group_id = $_GET['group'];
+$balance = $user->get_balance($group_id);
+if ($balance->num_rows > 0) {
+    while ($row = $balance->fetch_object()) {
+        ?>
+                                            <tr><td><span class="glyphicon glyphicon-user"></span> <?php
+                                            if ($row->balance_value < 0) {
+                                                echo $row->balance_name;
+                                                echo " gets back ";
+                                                echo $row->balance_value;
+                                            } elseif ($row->balance_value >= 0) {
+                                                echo $row->balance_name;
+                                                echo " owes ";
+                                                echo $row->balance_value;
+                                            }
+                                            ?>
+                                                </td></tr>
+                                                    <?php
                                                 }
-                                                ?>
-                                            </td></tr>
-                                    <?php
-                                }
-                            }
-                            ?>
-                            </tbody>
-                        </table>
+                                            }
+                                            ?>
+                                </tbody>
+                            </table>
                         </div>    
                     </div>
                 </div>
@@ -387,16 +495,22 @@ if (!isset($_SESSION['user'])) {
                 $('#example').DataTable();
             });
             $('.collapse').on('show.bs.collapse', function () {
-    $('.collapse.in').collapse('hide');
-});
-var table = $('#example').DataTable();
- 
-$('#example tbody').on( 'click', 'tr', function () {
-  var rowData = table.row( this ).data();
-  $("#exampleInputAmount").val(rowData[3]);
-  $("#exampleInputdesc").val(rowData[2]);
-  // ... do something with `rowData`
-} );
+                $('.collapse.in').collapse('hide');
+            });
+            $("#example tr").click(function(){
+                //$(this).toggleClass('selected');
+                $('#example tr').removeClass('selected');
+                $(this).toggleClass('selected');
+            });
+            var table = $('#example').DataTable();
+
+            $('#example tbody').on('click', 'tr', function () {
+                var rowData = table.row(this).data();
+                $("#exampleInputAmount").val(rowData[3]);
+                $("#exampleInputdesc").val(rowData[2]);
+                $("#expense_id").val(rowData[5]);
+                // ... do something with `rowData`
+            });
         </script>
 
     </body></html>

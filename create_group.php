@@ -11,7 +11,7 @@ if(!isset($_SESSION['user'])) {
 <?php
 	if(!empty($_POST["save"])) {
 		$conn = mysql_connect("localhost","root","");
-		mysql_select_db("splitnshare",$conn);
+		mysql_select_db("a4086541_splitn",$conn);
 		$itemCount = count($_POST["member_name"]);
 		$itemValues=0;
                 $group_name=$_GET['group'];
@@ -63,7 +63,7 @@ if(!isset($_SESSION['user'])) {
                             $mail->isHTML(true);                                  // Set email format to HTML
 
                             $mail->Subject = $user->get_username() . ' invites you to join SplitNShare';
-                            $mail->Body = $user->get_username() . ' invites you to join SplitNShare<hr></hr><hr></hr><a href="mailto:http://localhost/SplitNShare/register.php">SplitNShare</a>';
+                            $mail->Body = $user->get_username() . ' invites you to join SplitNShare<hr></hr><hr></hr><a href="http://localhost/SplitNShare/register.php">SplitNShare</a>';
                             $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
                             if (!$mail->send()) {
@@ -71,7 +71,7 @@ if(!isset($_SESSION['user'])) {
                                 echo 'Mailer Error: ' . $mail->ErrorInfo;
                             } else {
                                 $mailmessage = "Invitaion sent to the group members";
-                                header( "refresh:7;url=main.php");
+                                header( "refresh:7;url=dashboard1.php");
                             }
                             
     }

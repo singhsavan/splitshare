@@ -59,6 +59,38 @@ switch ($op) {
         } else header("Location:main.php?group=$groupname");
         break;    
         
+    case 'Settle Up':
+        $paid_by = $_POST['user'];
+        $amount=$_POST['exampleInputAmount'];
+        $paid_to=$_POST['exampleInputusername'];
+        $groupname=$_POST['exampleInputgroupname'];
+        if ($user_controller->settle_up($paid_by, $amount, $paid_to, $groupname)== false){
+            header("Location:create_events.php?err=2");
+
+                    
+        } else header("Location:main.php?group=$groupname");
+        break;
+        
+    case 'Edit bill':
+        $amount=$_POST['exampleInputAmount'];
+        $desc=$_POST['exampleInputdesc'];
+        $username=$_POST['exampleInputusername'];
+        $groupname=$_POST['exampleInputgroupname'];
+        $expenseid=$_POST['expense_id'];
+        if ($user_controller->edit_bill($amount, $desc, $username, $groupname, $expenseid)== false){
+            header("Location:create_events.php?err=2");
+        } else header("Location:main.php?group_member=$username&group=$groupname");
+        break; 
+        
+    case 'Delete bill':
+        $username=$_POST['exampleInputusername'];
+        $groupname=$_POST['exampleInputgroupname'];
+        $expenseid=$_POST['delete_expenseid'];
+        if ($user_controller->delete_bill($username, $groupname, $expenseid)== false){
+            header("Location:create_events.php?err=2");
+        } else header("Location:main.php?group_member=$username&group=$groupname");
+        break; 
+        
     case 'REGISTER':
         $studentid=$_POST['studentid'];
         $hearabout=$_POST['hearselect'];
