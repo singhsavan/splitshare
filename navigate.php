@@ -1,10 +1,15 @@
 <?php
 require_once 'user_controller.inc.php';
 require_once 'user_model.inc.php';
+require_once('adapter.php');
+
 
 @$op = $_REQUEST['op'];
 
 $user_controller = new UserController();
+$bill = new EditBillAdapter(new UserController());
+//$facebook = new FacebookAdapter(new Facebook());
+
 
 switch ($op) {
     case 'login':
@@ -77,7 +82,11 @@ switch ($op) {
         $username=$_POST['exampleInputusername'];
         $groupname=$_POST['exampleInputgroupname'];
         $expenseid=$_POST['expense_id'];
-        if ($user_controller->edit_bill($amount, $desc, $username, $groupname, $expenseid)== false){
+        //$msg = getMessageFromUser();
+//        if ($facebook->post($amount, $desc, $username, $groupname, $expenseid)== false){
+//            header("Location:create_events.php?err=2");
+//        } else header("Location:main.php?group_member=$username&group=$groupname");
+        if ($bill->edit_bill($amount, $desc, $username, $groupname, $expenseid)== false){
             header("Location:create_events.php?err=2");
         } else header("Location:main.php?group_member=$username&group=$groupname");
         break; 
