@@ -15,7 +15,7 @@ if(!isset($_SESSION['user'])) {
 		$itemCount = count($_POST["member_name"]);
 		$itemValues=0;
                 $group_name=$_GET['group'];
-		$query = "INSERT INTO group_members (member_name,member_email,member_group) VALUES ";
+		$query = "INSERT INTO group_members (member_name,member_email,member_group, user_type, member_active) VALUES ";
                 $query1 = "INSERT INTO balance (balance_name, group_name) select member_name, member_group from group_members where member_group = '$group_name'";
 		$queryValue = "";
 		for($i=0;$i<$itemCount;$i++) {
@@ -24,7 +24,7 @@ if(!isset($_SESSION['user'])) {
 				if($queryValue!="") {
 					$queryValue .= ",";
 				}
-				$queryValue .= "('" . $_POST["member_name"][$i] . "', '" . $_POST["member_email"][$i] . "', '" . @$_GET['group'] . "' )";
+				$queryValue .= "('" . $_POST["member_name"][$i] . "', '" . $_POST["member_email"][$i] . "', '" . @$_GET['group'] . "', '" . @$_GET['usertype'] . "', '" . @$_GET['member_active'] . "' )";
 			}
 		}
 		$sql = $query.$queryValue;
@@ -47,7 +47,7 @@ if(!isset($_SESSION['user'])) {
                             $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
                             $mail->Port = 465;                                    // TCP port to connect to
 
-                            $mail->setFrom('from@example.com', 'Mailer');
+                            $mail->setFrom('from@example.com', 'SplitNShare Webmaster');
                             //$mail->addAddress('tofiq.maredia@mailinator.com', 'tofiq');
                             //$mail->addAddress('alina@mailinator.com', 'alina');
                                 
@@ -63,8 +63,8 @@ if(!isset($_SESSION['user'])) {
                             $mail->isHTML(true);                                  // Set email format to HTML
 
                             $mail->Subject = $user->get_username() . ' invites you to join SplitNShare';
-                            $mail->Body = $user->get_username() . ' invites you to join SplitNShare<hr></hr><hr></hr><a href="http://localhost/SplitNShare/register.php">SplitNShare</a>';
-                            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+                            $mail->Body = $user->get_username() . ' invites you to join SplitNShare<hr></hr><a href="http://localhost/SplitNShare/register.php?group=' . $_GET['group'] . '">SplitNShare</a>';
+                            $mail->AltBody = '';
 
                             if (!$mail->send()) {
                                 echo 'Message could not be sent.';
@@ -190,16 +190,34 @@ if(!isset($_SESSION['user'])) {
                         <div class="form-group">
 
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="inputgroup" name="inputgroup" placeholder="Group Name" required autofocus />
+                                <?php if (isset($_GET['group'])) { ?>
+                                    <input type="" class="form-control" id="inputgroup" name="inputgroup" value="<?php echo $_GET['group'] ?>" readonly />
+                                <?php
+                                } else { ?>
+                                <input type="text" class="form-control" id="inputgroup" name="inputgroup" required autofocus />
                                 <input type="hidden" class="form-control" id="createdby" name="createdby" value="<?php echo $user->get_username() ?>" />
                                 <input type="hidden" class="form-control" id="email_id" name="email_id" value="<?php echo $user->get_useremail() ?>" />
+                                <input type="hidden" class="form-control" id="usertype" name="usertype" value="admin" />
+                                <input type="hidden" class="form-control" id="member_active" name="member_active" value="1" />
+                                <?php
+                                }
+                                ?>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <button type="submit" class="btn btn-default" name="op" value="creategroup">    
+                                <?php
+                                    if (isset($_GET['group'])) { ?>
+                                        <button type="submit" class="btn btn-default" name="op" value="creategroup" disabled="">    
                                     Create
-                                </button>
+                                </button> <?php
+                                    } else  { ?>
+                                        <button type="submit" class="btn btn-default" name="op" value="creategroup">    
+                                    Create
+                                </button> <?php
+                                    }
+                                ?>
+                                
                                 <?php if (@$_GET['success'] == "yes") { ?>
                                     <div class="text-success">Group created successfully. Please add group members below.</div>
                                 <?php } ?>

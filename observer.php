@@ -14,7 +14,7 @@ class NewUserMailer implements IObserver
     public function  onUserAdded( $observable, $data ) 
     {
         
-        $this->mail_admin("admin12@yopmail.com", "new user", $data);
+        $this->mail_admin("tofiq@yopmail.com", "new user", $data);
         
     }
     
@@ -34,8 +34,8 @@ class NewUserMailer implements IObserver
         $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
         $mail->Port = 465;                                    // TCP port to connect to
 
-        $mail->setFrom('from@example.com', 'Mailer');
-        $mail->addAddress('admin123@yopmail.com', 'tofiq');
+        $mail->setFrom('from@example.com', 'SplitNShare Webmaster');
+        $mail->addAddress($admin_mail, 'tofiq');
         $mail->addAddress('');               // Name is optional
         $mail->addReplyTo('', '');
         $mail->addCC('');
@@ -45,9 +45,9 @@ class NewUserMailer implements IObserver
         $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
         $mail->isHTML(true);                                  // Set email format to HTML
 
-        $mail->Subject = $data;
-        $mail->Body = 'This is the HTML message body <b>in bold!</b>';
-        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+        $mail->Subject = 'User ' . $data . ' added';
+        $mail->Body = 'Group member ' . $data . ' registered for group' ;
+        $mail->AltBody = '';
 
         if (!$mail->send()) {
             echo 'Message could not be sent.';

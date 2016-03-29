@@ -165,7 +165,7 @@ class UserController {
         } else return false;
         }
         
-    function edit_bill1($amount, $desc, $name, $groupname, $expenseid) {
+    function edit_bill_update($amount, $desc, $name, $groupname, $expenseid) {
 	//$sql="INSERT INTO `expense` (`expense_id`, `expense_desc`, `expense_amount`, `expense_by`, `group_name`) VALUES (NULL, '$desc', '$amount', '$name', '$groupname')";
         $sql="UPDATE expense SET expense_desc = '$desc', expense_amount = '$amount' where expense_id = '$expenseid'";
         $result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");

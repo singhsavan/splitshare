@@ -141,7 +141,7 @@ if(!isset($_SESSION['user'])) {
                                         }
                                     } else {
                                         echo "<tr>";
-                                        echo "<th width=150>No students attended. </th></tr>";
+                                        echo "<th width=150>No group created. </th></tr>";
                                     }
                                     ?>
                                     </tbody>    

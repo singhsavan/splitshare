@@ -20,7 +20,7 @@ class EditBillAdapter implements BillUpdate {
     }
     
     public function edit_bill($amount, $desc, $name, $groupname, $expenseid) {
-        $this->bill->edit_bill1($amount, $desc, $name, $groupname, $expenseid);
+        $this->bill->edit_bill_update($amount, $desc, $name, $groupname, $expenseid);
         return true;
     }
 
